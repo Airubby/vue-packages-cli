@@ -4,7 +4,12 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const packageInfo =require('../package.json'); 
 const config = require('./config');
-
+//将连接符的命名转为驼峰命名；不然优化打包的时候会出错；转化后首字母原来是小写就是小写
+function toHump(sName) {
+  return sName.replace(/^\-/, '').replace(/\-(\w)(\w+)/g, function(a, b,c){
+  return b.toUpperCase() + c.toLowerCase();
+ });
+}
 module.exports = {
   mode: 'production',
   entry: {
@@ -17,7 +22,7 @@ module.exports = {
     chunkFilename: '[id].js',
     libraryTarget: 'umd',
     libraryExport: 'default',
-    library: `${packageInfo.name}`,
+    library: toHump(`${packageInfo.name}`),
     umdNamedDefine: true,
     globalObject: 'typeof self !== \'undefined\' ? self : this'
   },

@@ -12,6 +12,25 @@ const install = function(Vue, opts = {}) {
   components.forEach(component => {
     Vue.component(component.name, component);
   });
+  if (!opts.axios) {
+    opts.axios = require('axios')
+    opts.axios.interceptors.request.use(
+      config => {
+        return config;
+      },
+      error => {
+        return Promise.reject(error);
+      }
+    );
+    opts.axios.interceptors.response.use(
+      response => {
+        return JSON.parse(JSON.stringify(response.data))
+      },
+      error => {
+        return Promise.reject(error.response)
+      }
+    )
+  }
   Vue.prototype.$axios = opts.axios
 
 };
