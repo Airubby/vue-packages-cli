@@ -1,5 +1,5 @@
 
-import testList from './src/main'
+import testList from './src/main.vue'
 
 testList.install = function(Vue) {
   Vue.component(testList.name, testList)
